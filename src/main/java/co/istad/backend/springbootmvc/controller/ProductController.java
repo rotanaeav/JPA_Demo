@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,31 +30,32 @@ public class ProductController {
         return productService.getProducts(pageNumber, pageSize);
     }
     @GetMapping("/{code}")
-    public ProductResponse getProduct(@PathVariable Integer code){
-        log.info("getProduct: {}",code);
-        return null;
+    public ProductResponse getProduct(@PathVariable String code){
+        return productService.getProductById(code);
     }
+
+@ResponseStatus(HttpStatus.CREATED)
 @PostMapping
-    public ProductResponse createProduct(@RequestBody CreateProductRequest request){
+    public ProductResponse createProduct(
+            @Valid @RequestBody CreateProductRequest request){
         log.info("Creating product: {}",request);
         return productService.createNew(request);
     }
+
     @PutMapping("/{code}")
     public ProductResponse updateProduct(
-            @PathVariable Integer code,
-            @RequestBody UpdateProductRequest updateProductRequest){
-        log.info("Updating product: {},code: {}",updateProductRequest,code);
-        return null;
+            @PathVariable String code,
+            @Valid @RequestBody UpdateProductRequest updateProductRequest){
+        return productService.updateProduct(code,updateProductRequest);
     }
     @DeleteMapping("/{code}")
-    public void deleteProduct(@PathVariable Integer code){
-        log.info("Deleting product: {}",code);
+    public void deleteProduct(@PathVariable String code){
+        productService.deleteProduct(code);
     }
     @PatchMapping("{code}")
-    public ProductResponse patchProduct(@PathVariable Integer code,
-                                        @RequestBody UpdateProductRequest updateProductRequest){
-        log.info("Patching product: {}, {}",updateProductRequest,code);
-        return null;
+    public ProductResponse patchProduct(@PathVariable String code,
+                                        @Valid @RequestBody UpdateProductRequest updateProductRequest){
+     return productService.partialUpdateProduct(code,updateProductRequest);
     }
 
 

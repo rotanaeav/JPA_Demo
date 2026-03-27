@@ -11,6 +11,6 @@ import java.time.Instant;
             Integer code,
             String message,
             Instant timestamp,
-            Object errorsDetails
+            Object errorsDescription
     ) {
     }
